@@ -40,7 +40,7 @@ const SITE_CONFIG = {
   cityLocation: '[City, Country]',
   classTeacher: '[Class Teacher Full Name]',
   // Optional: Provide an MP3/OGG URL here. If empty, our built-in nostalgic Web Audio piano synth plays when toggled!
-  audioUrl: '',
+  audioUrl: './assets/audio/Up Theme (Sad Verse Extended).mp3',
   finalQuote: 'We came as strangers. We leave as memories.',
 };
 
