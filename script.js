@@ -1,260 +1,263 @@
 /**
  * ============================================================================
- * GRADUATE 2027 — Digital Yearbook
- * Vanilla JavaScript (ES6+) port of the original React/TSX implementation.
+ * BITIRUV 2027 — Raqamli Bitiruv Albomi
+ * To'liq o'zbek tilidagi versiya + Netflix uslubidagi Hero slayd-shou.
  *
- * Sections:
- *   1. Site configuration & data
- *   2. UI class tokens (state-dependent Tailwind classes, kept as full strings)
- *   3. Helpers (DOM, icons, escaping, scroll-reveal)
- *   4. Ambient music (Web Audio synth / external audio file)
- *   5. Renderers (navigation, gallery, students, timeline, videos, messages)
- *   6. Modals (lightbox, student dossier, video player)
- *   7. Countdown
- *   8. Events & initialisation
+ * Bo'limlar:
+ *   1. Sayt sozlamalari va ma'lumotlar
+ *   2. UI klass tokenlari
+ *   3. Yordamchi funksiyalar (DOM, ikonkalar, scroll-reveal)
+ *   4. Fon musiqasi (Web Audio sintezator yoki tashqi MP3 fayl)
+ *   5. Sahifa bo'limlarini chizish (Hero slayd-shou, galereya, sinfdoshlar, vaqt chizig'i, videolar, tilaklar)
+ *   6. Modallar (Lightbox, o'quvchi portfoliosi, video pleyer)
+ *   7. Jonli taymer (Countdown)
+ *   8. Hodisalar va ishga tushirish
  * ============================================================================
  */
 
 /* ============================================================================
- * 1. SITE CONFIGURATION & DATA
+ * 1. SAYT SOZLAMALARI VA MA'LUMOTLAR
  * ========================================================================== */
 
 /**
- * CENTRALIZED SITE CONFIGURATION
- * Edit this single object to customize your school, class, dates, and copy.
+ * MARKAZLASHTIRILGAN SAYT SOZLAMALARI
+ * Maktab, sinf, bitiruv sanasi va matnlarni shu yerdan osongina o'zgartiring.
  */
 const SITE_CONFIG = {
-  brandName: 'GRADUATE 2027',
-  className: 'Class of 2027',
-  sectionBadge: '11-A · SENIOR ARCHIVE',
+  brandName: 'BITIRUV 2027',
+  className: '2027-yil bitiruvchilari',
+  sectionBadge: '11-A · BITIRUV ARXIVI',
   graduationYear: 2027,
-  // Set your target graduation ceremony date & time (ISO 8601 format)
+  // Bitiruv kechasi yoki So'nggi qo'ng'iroq sanasi va vaqti (ISO 8601 formatda)
   graduationDate: '2027-05-25T18:00:00',
-  heroTitle: 'The End of an Era.',
-  heroSubtitle: 'One journey. A thousand memories. An endless future.',
-  heroImage:
+  heroTitle: 'Bir davrning yakuni.',
+  heroSubtitle: "Bir yo'l. Minglab xotiralar. Cheksiz kelajak.",
+  // Netflix uslubidagi aylanib turuvchi asosiy fon rasmlari
+  heroImages: [
     'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=2000&q=85',
+    'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=2000&q=85',
+    'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&w=2000&q=85',
+  ],
   finalImage:
     'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=2000&q=85',
-  schoolName: '[Your School / Lyceum Name]',
-  cityLocation: '[City, Country]',
-  classTeacher: '[Class Teacher Full Name]',
-  // Optional: Provide an MP3/OGG URL here. If empty, our built-in nostalgic Web Audio piano synth plays when toggled!
+  schoolName: '[Maktab yoki Litsey nomi]',
+  cityLocation: "[Shahar, O'zbekiston]",
+  classTeacher: '[Sinf rahbarining F.I.Sh.]',
+  // Ixtiyoriy: MP3 fayl yo'lini kiriting. Bo'sh qoldirilsa yoki fayl topilmasa, o'rnatilgan mayin pianino musiqasi chalinadi!
   audioUrl: './assets/audio/Up Theme (Sad Verse Extended).mp3',
-  finalQuote: 'We came as strangers. We leave as memories.',
+  finalQuote: "Begona bo'lib keldik. Xotira bo'lib ketmoqdamiz.",
 };
 
 /**
- * STUDENTS DATA
- * Clearly labeled placeholder profiles ready for your classmates' real info.
+ * SINFDOShLAR MA'LUMOTLARI
+ * Har bir sinfdoshingizning haqiqiy ma'lumotlarini shu yerga kiriting.
  */
 const STUDENTS_DATA = [
   {
     id: 'std-01',
     number: '01',
-    name: 'Student 01 — Placeholder Name',
-    nickname: 'The Quiet Architect',
-    role: 'Class President',
+    name: "O'quvchi 01 — Ism Familiya",
+    nickname: "Sokin Me'mor",
+    role: 'Sinf sardori',
     photo:
       'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
     shortBio:
-      'Always organizing late-night study sessions and making sure nobody got left behind during exam week.',
+      "Imtihon haftalarida tungi tayyorgarlik darslarini tashkillashtirib, hech kim ortda qolmasligini ta'minlab yurgan do'stimiz.",
     favoriteMemory:
-      'Staying after sunset on the school rooftop terrace planning our final spring festival.',
-    futureDream: 'Architecture & Urban Design in Milan',
+      "Bahorgi festival oldidan quyosh botganda maktab ayvonida uzoq suhbatlashib o'tirganimiz.",
+    futureDream: "Milanda arxitektura va shaharsozlik yo'nalishi",
   },
   {
     id: 'std-02',
     number: '02',
-    name: 'Student 02 — Placeholder Name',
-    nickname: 'The Soundtrack',
-    role: 'Music & Events Lead',
+    name: "O'quvchi 02 — Ism Familiya",
+    nickname: 'Sinf Saundtreki',
+    role: 'Musiqa va tadbirlar mas’uli',
     photo:
       'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80',
     shortBio:
-      'Never seen without headphones around his neck; turned every bus trip into an unforgettable concert.',
+      "Bo'ynidan quloqchini hech qachon tushmaydigan, har bir sayohat avtobusini haqiqiy konsertga aylantirgan ijodkor.",
     favoriteMemory:
-      'Acoustic guitar sessions in Room 304 when the power went out during autumn rain.',
-    futureDream: 'Film Scoring & Audio Engineering',
+      "Kuzgi yomg'irda chiroq o'chib qolganida 304-xonada gitara chalib qo'shiq aytganimiz.",
+    futureDream: 'Kino musiqasi va ovoz rejissyorligi',
   },
   {
     id: 'std-03',
     number: '03',
-    name: 'Student 03 — Placeholder Name',
-    nickname: 'The Lens',
-    role: 'Yearbook Photographer',
+    name: "O'quvchi 03 — Ism Familiya",
+    nickname: 'Obyektiv Ustasi',
+    role: 'Albom fotografi',
     photo:
       'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80',
     shortBio:
-      'Captured ten thousand candid laughs so the rest of us could live inside the moment.',
+      "Biz lahzadan zavqlanishimiz uchun o'n minglab samimiy kulgularni kadrga muhrlagan inson.",
     favoriteMemory:
-      'Developing our first analog film roll of the Grade 10 mountain retreat.',
-    futureDream: 'Documentary Cinematography',
+      "10-sinfdagi tog' sayohatimizdan olingan ilk plyonkali suratlarni birga ko'rganimiz.",
+    futureDream: 'Hujjatli kino operatorligi',
   },
   {
     id: 'std-04',
     number: '04',
-    name: 'Student 04 — Placeholder Name',
-    nickname: 'The Strategist',
-    role: 'Olympiad Captain',
+    name: "O'quvchi 04 — Ism Familiya",
+    nickname: 'Strateg',
+    role: 'Olimpiada sardori',
     photo:
       'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80',
     shortBio:
-      'Could solve a calculus proof in thirty seconds and still lend his notes five minutes before the bell.',
+      "O'ttiz soniyada murakkab tenglamani yechib, qo'ng'iroqqa besh daqiqa qolganda ham daftarini ayamaydigan bilimdon.",
     favoriteMemory:
-      'Winning the regional science cup and celebrating with cold pizza on the stadium steps.',
-    futureDream: 'Artificial Intelligence & Robotics Research',
+      "Viloyat fan olimpiadasida g'olib bo'lib, stadion zinalarida do'stlar bilan nishonlaganimiz.",
+    futureDream: "Sun'iy intellekt va robototexnika tadqiqotlari",
   },
   {
     id: 'std-05',
     number: '05',
-    name: 'Student 05 — Placeholder Name',
-    nickname: 'The Storyteller',
-    role: 'Literature Editor',
+    name: "O'quvchi 05 — Ism Familiya",
+    nickname: 'Hikoyanavis',
+    role: 'Adabiyot muharriri',
     photo:
       'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80',
     shortBio:
-      'Wrote speeches that made the entire auditorium go silent and turned ordinary Tuesdays into poetry.',
+      "Butun zalni jim qiladigan nutqlar yozgan va oddiy seshanba kunlarini ham she'riyatga aylantirgan ijodkor.",
     favoriteMemory:
-      'Reading our time-capsule letters aloud during our last winter bonfire.',
-    futureDream: 'International Journalism & Publishing',
+      "So'nggi qishki gulxan atrofida kelajakka yozilgan vaqt kapsulasi maktublarini o'qiganimiz.",
+    futureDream: 'Xalqaro jurnalistika va noshirlik',
   },
   {
     id: 'std-06',
     number: '06',
-    name: 'Student 06 — Placeholder Name',
-    nickname: 'The Spark',
-    role: 'Athletics Captain',
+    name: "O'quvchi 06 — Ism Familiya",
+    nickname: 'Uchqun',
+    role: 'Sport sardori',
     photo:
       'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80',
     shortBio:
-      'Brought relentless energy to every morning homeroom and rallied the whole class on sports day.',
+      "Har tong sinfga tuganmas quvvat olib kirgan va sport musobaqalarida butun sinfni g'alabaga ruhlantirgan yetakchi.",
     favoriteMemory:
-      'Last-minute championship goal in Grade 11 with the entire class chanting from the bleachers.',
-    futureDream: 'Sports Medicine & Orthopedics',
+      "11-sinf chempionatida butun sinf olqishlari ostida so'nggi daqiqada urilgan g'alaba goli.",
+    futureDream: 'Sport tibbiyoti va ortopediya',
   },
   {
     id: 'std-07',
     number: '07',
-    name: 'Student 07 — Placeholder Name',
-    nickname: 'The Diplomat',
-    role: 'Student Council',
+    name: "O'quvchi 07 — Ism Familiya",
+    nickname: 'Diplomat',
+    role: "O'quvchilar kengashi",
     photo:
       'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80',
     shortBio:
-      'Bridged every group in our class with warmth, humor, and an uncanny ability to negotiate extra break time.',
+      "Sinfdagi har bir guruhni samimiyat va hazil bilan birlashtirgan, har doim kelishuv yo'lini topa olgan do'stimiz.",
     favoriteMemory:
-      'Organizing the midnight graduation countdown breakfast in the courtyard.',
-    futureDream: 'International Law & Diplomacy',
+      "Maktab hovlisida bitiruv kechasiga tayyorgarlik nonushtasini tashkillashtirganimiz.",
+    futureDream: 'Xalqaro huquq va diplomatiya',
   },
   {
     id: 'std-08',
     number: '08',
-    name: 'Student 08 — Placeholder Name',
-    nickname: 'The Visionary',
-    role: 'Creative Director',
+    name: "O'quvchi 08 — Ism Familiya",
+    nickname: 'Dizayner',
+    role: 'Kreativ direktor',
     photo:
       'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80',
     shortBio:
-      'Sketched in the margins of every notebook and designed every poster, hoodie, and stage backdrop we loved.',
+      "Har bir daftar chetiga rasm chizib yurgan va sinfimizning barcha afishalari, liboslari hamda sahna bezaklarini yaratgan rassom.",
     favoriteMemory:
-      'Painting the senior hallway mural overnight while listening to 2000s classics.',
-    futureDream: 'Creative Direction & Industrial Design',
+      "Sevimli qo'shiqlarimizni tinglab, bitiruvchilar yo'lagi devoriga rasm chizganimiz.",
+    futureDream: 'Kreativ direktorlik va sanoat dizayni',
   },
 ];
 
 /**
- * GALLERY DATA
- * Replace image URLs with your class photography. Varied aspect ratios create
- * an editorial Masonry rhythm.
+ * GALEREYA MA'LUMOTLARI
+ * URL manzillarni o'z sinfingiz rasmlariga almashtiring.
  */
 const GALLERY_CATEGORIES = [
-  'All',
-  'School Days',
-  'Friends',
-  'Events',
-  'Celebrations',
-  'Behind the Scenes',
+  'Barchasi',
+  'Maktab kunlari',
+  "Do'stlar",
+  'Tadbirlar',
+  'Bayramlar',
+  'Kadr ortida',
 ];
 
 const GALLERY_DATA = [
   {
     id: 'gal-01',
-    title: 'Golden Hour on the West Steps',
-    caption: 'Five minutes after the final physics exam—pure relief in the late afternoon sun.',
-    category: 'Friends',
+    title: "G'arbiy zinapoyadagi oltin soat",
+    caption: "Yakuniy fizika imtihonidan besh daqiqa o'tib — kechki quyosh nuridagi chinakam yengillik.",
+    category: "Do'stlar",
     year: '2027',
     aspect: 'aspect-[4/5]',
     src: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1000&q=80',
   },
   {
     id: 'gal-02',
-    title: 'Morning Light in Hallway B',
-    caption: 'Before the 8:00 AM bell rang, when the corridors belonged only to us.',
-    category: 'School Days',
+    title: 'B korpus yo‘lagidagi tonggi nur',
+    caption: "Soat 8:00 qo'ng'irog'i chalinishidan oldin, yo'laklar faqat bizniki bo'lgan pallalar.",
+    category: 'Maktab kunlari',
     year: '2026',
     aspect: 'aspect-[16/10]',
     src: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1000&q=80',
   },
   {
     id: 'gal-03',
-    title: 'Caps Toward the Sky',
-    caption: 'Rehearsing the toss we dreamed about since the seventh grade.',
-    category: 'Celebrations',
+    title: 'Osmon sari uchgan qalpoqlar',
+    caption: "Yettinchi sinfdan beri orzu qilgan bitiruv lahzasi mashg'uloti.",
+    category: 'Bayramlar',
     year: '2027',
     aspect: 'aspect-[3/4]',
     src: 'https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=1000&q=80',
   },
   {
     id: 'gal-04',
-    title: 'Autumn Gala Backstage',
-    caption: 'Fixing bowties and laughing nervously two minutes before the curtain opened.',
-    category: 'Behind the Scenes',
+    title: 'Kuzgi kecha sahna orti',
+    caption: "Parda ochilishidan ikki daqiqa oldin hayajonli kulgular va so'nggi tayyorgarlik.",
+    category: 'Kadr ortida',
     year: '2026',
     aspect: 'aspect-[4/3]',
     src: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1000&q=80',
   },
   {
     id: 'gal-05',
-    title: 'Library Archive Sessions',
-    caption: 'Stacks of textbooks, shared espresso, and whispered jokes under the reading lamps.',
-    category: 'School Days',
+    title: 'Kutubxonadagi dars tayyorlash',
+    caption: "Darsliklar uyumi, chiroq nuri ostidagi shivir-shivir hazillar va hamjihatlik.",
+    category: 'Maktab kunlari',
     year: '2025',
     aspect: 'aspect-[4/5]',
     src: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1000&q=80',
   },
   {
     id: 'gal-06',
-    title: 'Annual Winter Symphony',
-    caption: 'The night our class choir earned a standing ovation from the entire faculty.',
-    category: 'Events',
+    title: 'Qishki musiqiy kecha',
+    caption: "Sinfimiz jamoasi butun ustozlar olqishiga sazovor bo'lgan unutilmas oqshom.",
+    category: 'Tadbirlar',
     year: '2026',
     aspect: 'aspect-[16/11]',
     src: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1000&q=80',
   },
   {
     id: 'gal-07',
-    title: 'Unscripted Laughter',
-    caption: 'Between takes during our senior yearbook portrait shoot.',
-    category: 'Behind the Scenes',
+    title: 'Ssenariysiz kulgu',
+    caption: "Bitiruv albomi uchun suratga tushish jarayonidagi tanaffus lahzasi.",
+    category: 'Kadr ortida',
     year: '2027',
     aspect: 'aspect-[3/4]',
     src: 'https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1000&q=80',
   },
   {
     id: 'gal-08',
-    title: 'Spring Championship Night',
-    caption: 'Under the floodlights—every voice hoarse, every heart full.',
-    category: 'Events',
+    title: 'Bahorgi chempionat oqshomi',
+    caption: "Stadion chiroqlari ostida — ovozlar bo'g'ilgan, ammo qalblar g'ururga to'lgan kecha.",
+    category: 'Tadbirlar',
     year: '2026',
     aspect: 'aspect-[4/3]',
     src: 'https://images.unsplash.com/photo-1526232761682-d26e03ac148e?auto=format&fit=crop&w=1000&q=80',
   },
   {
     id: 'gal-09',
-    title: 'The Last Bell Toast',
-    caption: 'Sparklers, Polaroids, and promises to meet again every five years.',
-    category: 'Celebrations',
+    title: "So'nggi qo'ng'iroq shukuhi",
+    caption: "Yorqin lahzalar, suratlar va har besh yilda yana uchrashish va'dalari.",
+    category: 'Bayramlar',
     year: '2027',
     aspect: 'aspect-[4/5]',
     src: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1000&q=80',
@@ -262,109 +265,108 @@ const GALLERY_DATA = [
 ];
 
 /**
- * TIMELINE DATA
- * Grade 1 to Grade 11 journey chapters.
+ * VAQT CHIZIG'I (TIMELINE) MA'LUMOTLARI
+ * 1-sinfdan 11-sinfgacha bo'lgan maktab yillari.
  */
 const TIMELINE_DATA = [
   {
-    grade: 'Grade 01',
+    grade: '01-sinf',
     year: '2016 — 2017',
-    title: 'First Bell & Oversized Backpacks',
+    title: "Birinchi qo'ng'iroq va katta sumkalar",
     description:
-      'Stepping through the main gates for the very first time—holding flowers taller than ourselves, learning to write our names in neat cursive, and meeting the faces that would define the next eleven years.',
-    highlight: 'First September Assembly & Alphabet Ceremony',
+      "Maktab darvozasidan ilk bor qadam qo'yish — o'zimizdan baland guldastalar, husnixat bilan ismimizni yozishni o'rganish va keyingi o'n bir yilimizni bezaydigan chehralar bilan tanishish.",
+    highlight: 'Birinchi Sentyabr va Alifbe bayrami',
     image:
       'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=900&q=80',
   },
   {
-    grade: 'Grade 03',
+    grade: '03-sinf',
     year: '2018 — 2019',
-    title: 'Curiosity & Paper Airplanes',
+    title: "Qiziqish va qog'oz samolyotlar",
     description:
-      'Recess became an entire universe. We traded stickers, built cardboard castles for art week, and discovered the thrill of our very first field trips across the city.',
-    highlight: 'First Museum Expedition & Spring Talent Show',
+      "Tanaffuslar butun boshli olamga aylangan davr. Rasm haftaligida qog'oz qal'alar yasash va shahar bo'ylab ilk ekskursiyalarning hayajoni.",
+    highlight: "Muzeyga ilk sayohat va bahorgi iste'dodlar shousi",
     image:
       'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=900&q=80',
   },
   {
-    grade: 'Grade 05',
+    grade: '05-sinf',
     year: '2020 — 2021',
-    title: 'Crossing Into Middle School',
+    title: "Yuqori sinflar ostonasida",
     description:
-      'New classrooms, new teachers, and navigating an unpredictable world together. Even through screens and distance, our class group chat became our anchor.',
-    highlight: 'Transition to Senior Wing & Digital Hackathon',
+      "Yangi sinfxonalar, yangi fanlar va o'zgaruvchan dunyoga birgalikda moslashish. Hatto masofaviy kunlarda ham sinf chatimiz bizni birlashtirib turdi.",
+    highlight: "Katta korpusga o'tish va ilk loyihalar",
     image:
       'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80',
   },
   {
-    grade: 'Grade 07',
+    grade: '07-sinf',
     year: '2022 — 2023',
-    title: 'Finding Our Voices',
+    title: "O'z ovozimizni topish",
     description:
-      'Debate tournaments, late-afternoon football matches, and our legendary autumn campfires. Strangers officially became lifelong best friends.',
-    highlight: 'Three-Day Mountain Retreat & Debate Finals',
+      "Munozara klublari, darsdan keyingi futbol o'yinlari va unutilmas kuzgi sayohatlar. Shunchaki sinfdoshlar endi bir umrlik chin do'stlarga aylandi.",
+    highlight: "Uch kunlik tog' sayohati va munozara finali",
     image:
       'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=900&q=80',
   },
   {
-    grade: 'Grade 09',
+    grade: '09-sinf',
     year: '2024 — 2025',
-    title: 'First Exams & Midnight Dreams',
+    title: 'Ilk imtihonlar va katta orzular',
     description:
-      'Our first major academic milestone. Hours spent solving past papers together, sharing playlists, and realizing how fast childhood was turning into adulthood.',
-    highlight: '9th Grade Graduation Banquet & Olympiad Medals',
+      "Birinchi jiddiy akademik sinov. Birgalikda misollar yechib o'tkazilgan soatlar va bolalik qanchalik tez ulg'ayishga aylanayotganini his qilish.",
+    highlight: '9-sinf bitiruv oqshomi va olimpiada medallari',
     image:
       'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=900&q=80',
   },
   {
-    grade: 'Grade 10',
+    grade: '10-sinf',
     year: '2025 — 2026',
-    title: 'Leaders of the Hallway',
+    title: 'Maktab yetakchilari',
     description:
-      'Hosting school festivals, mentoring younger students, and starting university applications while savoring every ordinary lunch break.',
-    highlight: 'Winter Charity Gala & Senior Hoodie Reveal',
+      "Maktab tadbirlarini boshqarish, kichik sinflarga o'rnak bo'lish va oliygohlarga tayyorgarlik ko'ra turib har bir tanaffusning qadriga yetish.",
+    highlight: 'Qishki xayriya kechasi va bitiruvchilar libosi',
     image:
       'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80',
   },
   {
-    grade: 'Grade 11',
+    grade: '11-sinf',
     year: '2026 — 2027',
-    title: 'The Final Chapter',
+    title: "So'nggi sahifa",
     description:
-      'Last bell rehearsals, tearful thank-yous to our mentors, and standing at the edge of everything next. Class of 2027—forever etched in these walls.',
-    highlight: 'Last Bell Ceremony & Graduation Night 2027',
+      "So'nggi qo'ng'iroq mashqlari, ustozlarga ko'zda yosh bilan aytilgan rahmatlar va yangi hayot ostonasida turish. 2027-yil bitiruvchilari — bu devorlarda abadiy qolasiz.",
+    highlight: "So'nggi qo'ng'iroq va Bitiruv kechasi 2027",
     image:
       'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=900&q=80',
   },
 ];
 
 /**
- * VIDEO MEMORIES DATA
- * Replace `videoUrl` with your own MP4 links anytime.
+ * VIDEO XOTIRALAR MA'LUMOTLARI
+ * `videoUrl` manzillarini o'z MP4 fayllaringizga almashtiring.
  */
 const VIDEOS_DATA = [
   {
     id: 'vid-01',
-    chapter: 'FILM I · OFFICIAL AFTERMOVIE',
-    title: 'Eleven Years in Four Minutes',
+    chapter: 'FILM I · RASMIY TREYLER',
+    title: "O'n bir yil — to'rt daqiqada",
     duration: '04:18',
     year: '2027',
     description:
-      'A super-8 and 4K visual montage weaving together archival footage from Grade 1 with our final week on campus.',
+      "1-sinfdagi arxiv kadrlarni maktabdagi so'nggi haftamiz bilan birlashtirgan ta'sirli video-xotira.",
     thumbnail:
       'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=1400&q=80',
-    // Reliable open-source sample MP4 stream for functional playback
     videoUrl:
       'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
   },
   {
     id: 'vid-02',
-    chapter: 'FILM II · DOCUMENTARY SHORT',
-    title: 'Unfiltered: Voices of Class 2027',
+    chapter: 'FILM II · HUJJATLI SUHBAT',
+    title: 'Samimiy: 2027-yil bitiruvchilari ovozi',
     duration: '06:42',
     year: '2027',
     description:
-      'Candid sit-down interviews filmed in empty classrooms—sharing regrets, gratitude, and predictions for 2037.',
+      "Bo'sh sinfxonalarda olingan samimiy intervyular — minnatdorlik, xotiralar va 2037-yilga tilaklar.",
     thumbnail:
       'https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=1200&q=80',
     videoUrl:
@@ -372,12 +374,12 @@ const VIDEOS_DATA = [
   },
   {
     id: 'vid-03',
-    chapter: 'FILM III · BACKSTAGE REEL',
-    title: 'After the Bell: Bloopers & Road Trips',
+    chapter: 'FILM III · SAHNA ORTI',
+    title: "Qo'ng'iroqdan so'ng: Kulgili lahzalar va sayohatlar",
     duration: '03:15',
     year: '2026',
     description:
-      'Phone-camera chaos, bus karaoke, snow fights, and every unscripted second that never made the official newsletter.',
+      "Telefon kamerasiga muhrlangan quvnoq lahzalar, avtobusdagi qo'shiqlar va rasmiy albomga kirmagan kadrlar.",
     thumbnail:
       'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1200&q=80',
     videoUrl:
@@ -386,99 +388,93 @@ const VIDEOS_DATA = [
 ];
 
 /**
- * MESSAGES DATA
- * Featured Homeroom Teacher Tribute + Faculty & Classmate Letters.
+ * TILAKLAR VA MAKTUBLAR MA'LUMOTLARI
  */
 const MESSAGES_DATA = {
   featuredTeacher: {
-    label: 'FROM OUR HOMEROOM MENTOR',
+    label: 'SINF RAHBARIMIZDAN',
     author: SITE_CONFIG.classTeacher,
-    role: 'Class Teacher · 2016–2027',
+    role: 'Sinf rahbari · 2016–2027',
     quote:
-      '“When you walked into my classroom eleven years ago, you asked how to spell the biggest words. Today, you are writing stories none of us could have imagined. Carry your kindness louder than your ambitions, remember where you began, and know that my door—and my heart—will always remain open to Class of 2027.”',
+      "“O'n bir yil avval sinfimga ilk bor qadam qo'yganingizda, eng katta so'zlarni qanday yozishni so'ragan edingiz. Bugun esa hech birimiz tasavvur ham qila olmagan ulkan hikoyalarni o'zingiz yozmoqdasiz. Mehribonligingizni orzularingizdan ham balandroq tuting, qayerdan boshlaganingizni unutmang va mening eshigim ham, qalbim ham 2027-yil bitiruvchilari uchun doimo ochiq ekanini biling.”",
   },
   notes: [
     {
       id: 'msg-01',
-      category: 'Faculty',
-      author: '[Literature & Humanities Teacher]',
-      role: 'Senior Faculty',
+      category: 'Ustozlar',
+      author: "[Adabiyot va tarix o'qituvchisi]",
+      role: 'Oliy toifali ustoz',
       message:
-        'You taught me that great classrooms are built not on silence, but on fearless questions. Never stop reading between the lines of the world.',
+        "Sizlar menga haqiqiy sinf sukunat bilan emas, balki dadil savollar va samimiy qiziqish bilan bunyod bo'lishini ko'rsatdingiz. Dunyoni teran anglashdan hech qachon to'xtamang.",
     },
     {
       id: 'msg-02',
-      category: 'Faculty',
-      author: '[Mathematics & Physics Teacher]',
-      role: 'STEM Department',
+      category: 'Ustozlar',
+      author: "[Matematika va fizika o'qituvchisi]",
+      role: "Aniq fanlar bo'limi",
       message:
-        'Every difficult equation eventually yields to patience and teamwork—just like the spirit I witnessed in this room every single morning.',
+        "Har qanday murakkab tenglama sabr va hamjihatlik bilan yechim topadi — xuddi har tong shu sinfda ko'rganim ahillik kabi.",
     },
     {
       id: 'msg-03',
-      category: 'Classmates',
-      author: 'Student 01 — Placeholder',
-      role: 'To Class of 2027',
+      category: 'Sinfdoshlar',
+      author: "O'quvchi 01 — Ism Familiya",
+      role: '2027-yil bitiruvchilariga',
       message:
-        'Thank you for turning ordinary Monday mornings into memories I will replay for the rest of my life. No matter what time zone we live in, we are home.',
+        "Oddiy dushanba tonglarini ham butun umr eslab yuradigan yorqin xotiralarga aylantirganingiz uchun rahmat. Dunyoning qaysi burchagida bo'lmaylik, biz bir oilamiz.",
     },
     {
       id: 'msg-04',
-      category: 'Classmates',
-      author: 'Student 05 — Placeholder',
-      role: 'To Our Future Selves',
+      category: 'Sinfdoshlar',
+      author: "O'quvchi 05 — Ism Familiya",
+      role: 'Kelajakdagi o‘zimizga',
       message:
-        'Here is to the hallway conversations, the shared umbrella in November, and the courage to chase dreams that scare us.',
+        "Yo'laklardagi uzoq suhbatlar, yomg'irli kundagi umumiy soyabon va katta orzular sari dadil qadamlarimiz abadiy yodimizda qolsin.",
     },
     {
       id: 'msg-05',
-      category: 'Faculty',
-      author: '[School Principal]',
-      role: 'Administration',
+      category: 'Ustozlar',
+      author: '[Maktab direktori]',
+      role: "Maktab ma'muriyati",
       message:
-        'Class of 2027, you leave behind a standard of excellence, empathy, and creativity that will inspire every class that follows in your footsteps.',
+        "2027-yil bitiruvchilari, sizlar o'zingizdan keyingi barcha avlodlarga ilhom bo'ladigan yuksak bilim, mehr-oqibat va ijodkorlik namunasini qoldirmoqdasiz.",
     },
     {
       id: 'msg-06',
-      category: 'Classmates',
-      author: 'Student 08 — Placeholder',
-      role: 'To Every Friend Here',
+      category: 'Sinfdoshlar',
+      author: "O'quvchi 08 — Ism Familiya",
+      role: "Har bir do'stimga",
       message:
-        'We came into this building knowing only our own names, and we walk out carrying thirty lifetimes inside our hearts.',
+        "Bu binoga faqat o'z ismimizni bilib kirgan edik, bugun esa qalbimizda o'ttizta qadrdon taqdirni olib chiqib ketmoqdamiz.",
     },
   ],
 };
 
-const MESSAGE_TABS = ['All', 'Faculty', 'Classmates'];
+const MESSAGE_TABS = ['Barchasi', 'Ustozlar', 'Sinfdoshlar'];
 
 const NAV_ITEMS = [
-  { id: 'home', label: 'Home' },
-  { id: 'story', label: 'Our Story' },
-  { id: 'memories', label: 'Memories' },
-  { id: 'class', label: 'Class' },
-  { id: 'journey', label: 'Journey' },
-  { id: 'videos', label: 'Videos' },
-  { id: 'wishes', label: 'Wishes' },
+  { id: 'home', label: 'Bosh sahifa' },
+  { id: 'story', label: 'Hikoyamiz' },
+  { id: 'memories', label: 'Xotiralar' },
+  { id: 'class', label: 'Sinfimiz' },
+  { id: 'journey', label: "Yo'limiz" },
+  { id: 'videos', label: 'Videolar' },
+  { id: 'wishes', label: 'Tilaklar' },
 ];
 
 /* ============================================================================
- * 2. UI CLASS TOKENS
- * State-dependent classes are written out as complete strings so that every
- * class is present in the compiled style.css.
+ * 2. UI KLASS TOKENLARI
  * ========================================================================== */
 
 const CLASSES = {
-  // Scroll-reveal (opacity + translate transition)
   revealHidden: 'opacity-0 translate-y-7',
   revealVisible: 'opacity-100 translate-y-0',
   revealBase: 'transition-all duration-1000 ease-out',
 
-  // Header
   headerScrolled:
     'bg-[#0B0B0B]/85 backdrop-blur-xl border-b border-[#292929]/80 py-3.5',
   headerTop: 'bg-gradient-to-b from-[#0B0B0B]/80 to-transparent py-6',
 
-  // Desktop nav
   navLinkBase:
     'relative py-1 text-xs uppercase tracking-[0.2em] transition-colors',
   navLinkActive: 'text-[#C5A059]',
@@ -488,46 +484,39 @@ const CLASSES = {
   navUnderlineActive: 'w-full',
   navUnderlineInactive: 'w-0',
 
-  // Mobile nav
   mobileLinkBase:
     'text-left py-2.5 border-b border-[#1C1C1C] font-serif text-2xl tracking-wide transition-colors',
   mobileLinkActive: 'text-[#C5A059]',
   mobileLinkInactive: 'text-[#F5F5F5]',
 
-  // Footer nav
   footerLink: 'hover:text-[#C5A059] transition-colors',
 
-  // Music button
   musicOn: 'border-[#C5A059] bg-[#C5A059]/15 text-[#C5A059]',
   musicOff:
     'border-[#292929] bg-[#141414]/80 text-[#999999] hover:border-[#C5A059]/50 hover:text-[#F5F5F5]',
 
-  // Gallery filter pills
   galleryPillBase:
     'px-4 py-2 text-xs uppercase tracking-[0.18em] border transition-all',
   galleryPillActive: 'bg-[#C5A059] text-[#0B0B0B] border-[#C5A059] font-medium',
   galleryPillInactive:
     'bg-[#141414] text-[#999999] border-[#292929] hover:border-[#C5A059]/60 hover:text-[#F5F5F5]',
 
-  // Timeline grade pills
   gradePillBase: 'px-3.5 py-1.5 text-xs uppercase tracking-[0.2em] border transition-all',
   gradePillActive: 'border-[#C5A059] bg-[#C5A059]/15 text-[#C5A059]',
   gradePillInactive:
     'border-[#292929] bg-[#141414] text-[#999999] hover:text-[#F5F5F5]',
 
-  // Message filter tabs
   messageTabBase: 'px-4 py-2 text-xs uppercase tracking-[0.2em] border transition-colors',
   messageTabActive: 'border-[#C5A059] bg-[#C5A059] text-[#0B0B0B] font-medium',
   messageTabInactive:
     'border-[#292929] bg-[#141414] text-[#999999] hover:text-[#F5F5F5]',
 
-  // Countdown container variants
   countdownGrid: 'grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6',
   countdownDone: 'p-10 md:p-14 bg-[#0B0B0B] border border-[#C5A059]/60',
 };
 
 /* ============================================================================
- * 3. HELPERS
+ * 3. YORDAMCHI FUNKSIYALAR
  * ========================================================================== */
 
 const $ = (selector, root = document) => root.querySelector(selector);
@@ -542,19 +531,16 @@ const escapeHTML = (value) =>
     "'": '&#39;',
   }[ch]));
 
-/** Lucide icon rendered from the inline SVG sprite in index.html */
 const icon = (name, className = '') =>
   `<svg class="${className}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#icon-${name}"></use></svg>`;
 
 const splitClasses = (classes) => classes.split(' ').filter(Boolean);
 
-/** Swap between an "on" and "off" class set on an element. */
 function toggleClasses(el, isOn, onClasses, offClasses) {
   el.classList.remove(...splitClasses(isOn ? offClasses : onClasses));
   el.classList.add(...splitClasses(isOn ? onClasses : offClasses));
 }
 
-/** Activate on Enter / Space, like the original role="button" elements. */
 function onActivateKey(event, callback) {
   if (event.key === 'Enter' || event.key === ' ') {
     event.preventDefault();
@@ -562,7 +548,7 @@ function onActivateKey(event, callback) {
   }
 }
 
-/* ---------- Scroll reveal (respects prefers-reduced-motion) --------------- */
+/* ---------- Scroll reveal ------------------------------------------------- */
 
 function showReveal(el) {
   el.classList.remove(...splitClasses(CLASSES.revealHidden));
@@ -587,7 +573,7 @@ function initReveal(el) {
   el.style.transitionDelay = `${el.dataset.delay || 0}ms`;
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    void el.offsetWidth; // flush styles so the transition still runs
+    void el.offsetWidth;
     showReveal(el);
     return;
   }
@@ -596,7 +582,6 @@ function initReveal(el) {
 
 const initReveals = (root = document) => $$('[data-reveal]', root).forEach(initReveal);
 
-/** A <div> wrapper equivalent to the original <Reveal> component. */
 function createReveal(innerHTML, { className = '', delay = 0 } = {}) {
   const el = document.createElement('div');
   el.dataset.reveal = '';
@@ -606,10 +591,6 @@ function createReveal(innerHTML, { className = '', delay = 0 } = {}) {
   return el;
 }
 
-/**
- * Keyed list reconciliation (mirrors React's `key` behaviour): existing items
- * keep their DOM node (and their revealed state), new items fade in.
- */
 function reconcileKeyed(container, items, { getKey, create, update }) {
   const existing = new Map();
   Array.from(container.children).forEach((el) => existing.set(el.dataset.key, el));
@@ -642,24 +623,24 @@ function reconcileKeyed(container, items, { getKey, create, update }) {
 }
 
 /* ============================================================================
- * APPLICATION STATE
+ * ILOVA HOLATI (STATE)
  * ========================================================================== */
 
 const state = {
   scrolled: false,
   activeSection: 'home',
   mobileMenuOpen: false,
-  selectedCategory: 'All',
+  selectedCategory: 'Barchasi',
   lightboxIndex: null,
   studentSearch: '',
   activeStudent: null,
   activeGradeIdx: 0,
   activeVideo: null,
-  messageFilter: 'All',
+  messageFilter: 'Barchasi',
 };
 
 const getFilteredGallery = () =>
-  state.selectedCategory === 'All'
+  state.selectedCategory === 'Barchasi'
     ? GALLERY_DATA
     : GALLERY_DATA.filter((item) => item.category === state.selectedCategory);
 
@@ -676,15 +657,12 @@ const getFilteredStudents = () => {
 };
 
 const getFilteredMessages = () =>
-  state.messageFilter === 'All'
+  state.messageFilter === 'Barchasi'
     ? MESSAGES_DATA.notes
     : MESSAGES_DATA.notes.filter((m) => m.category === state.messageFilter);
 
 /* ============================================================================
- * 4. AMBIENT NOSTALGIC AUDIO
- * Plays the audio file from SITE_CONFIG.audioUrl if set; otherwise generates
- * gentle felt-piano / ambient pad chords via the Web Audio API.
- * Strictly user-initiated (never autoplays).
+ * 4. NOSTALJIK FON MUSIQASI (Web Audio API zaxira mexanizmi bilan)
  * ========================================================================== */
 
 function createAmbientMusic(audioUrl, onChange) {
@@ -715,7 +693,6 @@ function createAmbientMusic(audioUrl, onChange) {
     const ctx = new AudioCtx();
     audioCtx = ctx;
 
-    // Warm nostalgic progression: Fmaj7 -> Am7 -> Dm9 -> Cmaj7
     const chords = [
       [174.61, 220.0, 261.63, 329.63],
       [220.0, 261.63, 329.63, 392.0],
@@ -752,30 +729,31 @@ function createAmbientMusic(audioUrl, onChange) {
   };
 
   const toggle = () => {
+    if (isPlaying) {
+      if (audioEl) audioEl.pause();
+      stopSynth();
+      setPlaying(false);
+      return;
+    }
+
     if (audioUrl) {
       if (!audioEl) {
         audioEl = new Audio(audioUrl);
         audioEl.loop = true;
       }
-      if (isPlaying) {
-        audioEl.pause();
-        setPlaying(false);
-      } else {
-        audioEl
-          .play()
-          .then(() => setPlaying(true))
-          .catch(() => setPlaying(false));
-      }
+      audioEl
+        .play()
+        .then(() => setPlaying(true))
+        .catch(() => {
+          // Agar MP3 fayl topilmasa, avtomatik ravishda sintezator musiqasiga o'tadi
+          startSynth();
+          setPlaying(true);
+        });
       return;
     }
 
-    if (isPlaying) {
-      stopSynth();
-      setPlaying(false);
-    } else {
-      startSynth();
-      setPlaying(true);
-    }
+    startSynth();
+    setPlaying(true);
   };
 
   const destroy = () => {
@@ -795,7 +773,7 @@ function renderMusicButton() {
   button.setAttribute('aria-pressed', String(playing));
   button.setAttribute(
     'aria-label',
-    playing ? 'Pause ambient soundtrack' : 'Play ambient soundtrack'
+    playing ? "Fon musiqasini o'chirish" : 'Fon musiqasini yoqish'
   );
   toggleClasses(button, playing, CLASSES.musicOn, CLASSES.musicOff);
 
@@ -805,37 +783,64 @@ function renderMusicButton() {
          <span class="w-[2px] h-full bg-[#C5A059] eq-bar-2 origin-bottom"></span>
          <span class="w-[2px] h-full bg-[#C5A059] eq-bar-3 origin-bottom"></span>
        </span>
-       <span class="hidden sm:inline">Sound On</span>`
+       <span class="hidden sm:inline">Ovoz yoniq</span>`
     : `${icon('volume-x', 'w-3.5 h-3.5')}
-       <span class="hidden sm:inline">Sound Off</span>`;
+       <span class="hidden sm:inline">Ovoz o'chiq</span>`;
 }
 
 /* ============================================================================
- * 5. RENDERERS
+ * 5. SAHIFA BO'LIMLARINI CHIZISH
  * ========================================================================== */
-
-/* ---------- Site config bindings ----------------------------------------- */
 
 function applySiteConfig() {
   const { featuredTeacher } = MESSAGES_DATA;
 
-  $('#hero-image').src = SITE_CONFIG.heroImage;
   $('#hero-badge-text').textContent = `${SITE_CONFIG.brandName} · ${SITE_CONFIG.schoolName}`;
   $('#hero-title').textContent = SITE_CONFIG.heroTitle;
   $('#hero-subtitle').textContent = SITE_CONFIG.heroSubtitle;
-  $('#countdown-subtitle').textContent = `Counting every second until ${SITE_CONFIG.className} steps onto the graduation stage.`;
+  $('#countdown-subtitle').textContent = `${SITE_CONFIG.className} bitiruv sahnasiga qadam qo'yguniga qadar har bir soniyani sanaymiz.`;
   $('#teacher-label').textContent = featuredTeacher.label;
   $('#teacher-quote').textContent = featuredTeacher.quote;
   $('#teacher-author').textContent = featuredTeacher.author;
   $('#teacher-role').textContent = featuredTeacher.role;
-  $('#teacher-dedication').textContent = `Dedicated to ${SITE_CONFIG.className}`;
+  $('#teacher-dedication').textContent = `${SITE_CONFIG.className}ga bag'ishlanadi`;
   $('#final-image').src = SITE_CONFIG.finalImage;
   $('#final-quote').textContent = `“${SITE_CONFIG.finalQuote}”`;
   $('#footer-school').textContent = SITE_CONFIG.schoolName;
-  $('#footer-tagline').textContent = `Digital Time Capsule · ${SITE_CONFIG.className}`;
+  $('#footer-tagline').textContent = `Raqamli Vaqt Kapsulasi · ${SITE_CONFIG.className}`;
 }
 
-/* ---------- Navigation ---------------------------------------------------- */
+/* ---------- Netflix uslubidagi Hero slayd-shou ---------------------------- */
+
+let currentHeroIndex = 0;
+
+function startHeroSlideshow() {
+  const container = $('#hero-slides-container');
+  const images = SITE_CONFIG.heroImages || [];
+  if (!container || images.length === 0) return;
+
+  container.innerHTML = images
+    .map(
+      (imgSrc, idx) => `
+      <img src="${escapeHTML(imgSrc)}" alt="Bitiruv 2027 xotira kadri ${idx + 1}" class="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ease-in-out scale-105 ${idx === 0 ? 'opacity-100' : 'opacity-0'}">`
+    )
+    .join('');
+
+  if (images.length <= 1) return;
+
+  const slideImages = container.querySelectorAll('img');
+  setInterval(() => {
+    slideImages[currentHeroIndex].classList.remove('opacity-100');
+    slideImages[currentHeroIndex].classList.add('opacity-0');
+
+    currentHeroIndex = (currentHeroIndex + 1) % slideImages.length;
+
+    slideImages[currentHeroIndex].classList.remove('opacity-0');
+    slideImages[currentHeroIndex].classList.add('opacity-100');
+  }, 5000);
+}
+
+/* ---------- Navigatsiya --------------------------------------------------- */
 
 function renderNavigation() {
   $('#desktop-nav').innerHTML = NAV_ITEMS.map(
@@ -896,7 +901,6 @@ function scrollToSection(id) {
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-/** Navbar glass transition & active-section tracking */
 function handleScroll() {
   const scrolled = window.scrollY > 40;
   if (scrolled !== state.scrolled) {
@@ -918,7 +922,7 @@ function handleScroll() {
   }
 }
 
-/* ---------- Gallery ------------------------------------------------------- */
+/* ---------- Galereya ------------------------------------------------------ */
 
 function renderGalleryFilters() {
   $('#gallery-filters').innerHTML = GALLERY_CATEGORIES.map(
@@ -945,7 +949,6 @@ function galleryItemHTML(photo, index) {
         <img src="${escapeHTML(photo.src)}" alt="${escapeHTML(photo.title)}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
       </div>
 
-      <!-- Dark Gradient Overlay & Caption -->
       <div class="absolute inset-0 bg-gradient-to-t from-[#0B0B0B] via-[#0B0B0B]/25 to-transparent opacity-80 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6">
         <div class="flex items-center justify-between text-[10px] uppercase tracking-[0.24em] text-[#C5A059] mb-1.5">
           <span>${escapeHTML(photo.category)}</span>
@@ -961,14 +964,14 @@ function renderGallery() {
   $('#gallery-grid').innerHTML = getFilteredGallery().map(galleryItemHTML).join('');
 }
 
-/* ---------- Students ------------------------------------------------------ */
+/* ---------- Sinfdoshlar --------------------------------------------------- */
 
 function studentCardHTML(student) {
   return `
     <article data-student-id="${student.id}" role="button" tabindex="0" class="group bg-[#141414] border border-[#292929] hover:border-[#C5A059] transition-all duration-500 overflow-hidden cursor-pointer flex flex-col h-full">
       <div class="relative aspect-[3/4] overflow-hidden bg-[#1C1C1C]">
         <img src="${escapeHTML(student.photo)}" alt="${escapeHTML(student.name)}" loading="lazy" class="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700">
-        <div class="absolute top-3 left-3 px-2.5 py-1 bg-[#0B0B0B]/80 backdrop-blur-md border border-[#292929] text-[10px] tracking-[0.25em] text-[#C5A059]">NO. ${escapeHTML(student.number)}</div>
+        <div class="absolute top-3 left-3 px-2.5 py-1 bg-[#0B0B0B]/80 backdrop-blur-md border border-[#292929] text-[10px] tracking-[0.25em] text-[#C5A059]">№ ${escapeHTML(student.number)}</div>
         <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#141414] to-transparent"></div>
       </div>
 
@@ -980,7 +983,7 @@ function studentCardHTML(student) {
         </div>
 
         <div class="mt-5 pt-4 border-t border-[#292929] flex items-center justify-between text-[11px] uppercase tracking-[0.18em] text-[#999999] group-hover:text-[#F5F5F5]">
-          <span>View Dossier</span>
+          <span>Batafsil ko'rish</span>
           ${icon('chevron-right', 'w-4 h-4 text-[#C5A059] group-hover:translate-x-1 transition-transform')}
         </div>
       </div>
@@ -998,7 +1001,7 @@ function renderStudents() {
   });
 }
 
-/* ---------- Timeline ------------------------------------------------------ */
+/* ---------- Vaqt chizig'i (Timeline) -------------------------------------- */
 
 function renderTimelinePills() {
   $('#timeline-pills').innerHTML = TIMELINE_DATA.map(
@@ -1021,15 +1024,12 @@ function timelineNodeHTML(node, index) {
   const isEven = index % 2 === 0;
   return `
     <div id="timeline-node-${index}" data-timeline-index="${index}" class="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center ${isEven ? '' : 'md:direction-rtl'}">
-      <!-- Center Node Dot -->
       <div class="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-[#0B0B0B] border-2 border-[#C5A059] z-10 shadow-[0_0_15px_rgba(197,160,89,0.6)]"></div>
 
-      <!-- Image Side -->
       <div class="${isEven ? 'md:order-1' : 'md:order-2'} overflow-hidden border border-[#292929] bg-[#141414] group">
         <img src="${escapeHTML(node.image)}" alt="${escapeHTML(`${node.grade} — ${node.title}`)}" loading="lazy" class="w-full aspect-[16/10] object-cover group-hover:scale-105 transition-transform duration-700">
       </div>
 
-      <!-- Narrative Side -->
       <div class="${isEven ? 'md:order-2 md:pl-6' : 'md:order-1 md:pr-6'}">
         <div class="flex items-center gap-3 text-xs uppercase tracking-[0.25em] text-[#C5A059] mb-2">
           <span>${escapeHTML(node.grade)}</span>
@@ -1056,7 +1056,7 @@ function renderTimeline() {
   });
 }
 
-/* ---------- Videos -------------------------------------------------------- */
+/* ---------- Videolar ------------------------------------------------------ */
 
 function videoCardHTML(video, isFeatured) {
   return `
@@ -1065,14 +1065,12 @@ function videoCardHTML(video, isFeatured) {
         <img src="${escapeHTML(video.thumbnail)}" alt="${escapeHTML(video.title)}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
         <div class="absolute inset-0 bg-gradient-to-t from-[#0B0B0B] via-[#0B0B0B]/35 to-transparent"></div>
 
-        <!-- Custom Matte Gold Play Button -->
         <div class="absolute inset-0 flex items-center justify-center">
           <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#0B0B0B]/75 backdrop-blur-md border border-[#C5A059] flex items-center justify-center group-hover:bg-[#C5A059] group-hover:scale-110 transition-all duration-300 shadow-[0_0_30px_rgba(197,160,89,0.3)]">
             ${icon('play', 'w-6 h-6 md:w-7 md:h-7 text-[#C5A059] group-hover:text-[#0B0B0B] fill-current ml-0.5')}
           </div>
         </div>
 
-        <!-- Duration Pill -->
         <div class="absolute top-4 right-4 px-3 py-1 bg-[#0B0B0B]/85 border border-[#292929] text-xs tracking-widest text-[#F5F5F5]">${escapeHTML(video.duration)}</div>
       </div>
 
@@ -1084,7 +1082,7 @@ function videoCardHTML(video, isFeatured) {
         </div>
         <span class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#C5A059] shrink-0">
           ${icon('film', 'w-4 h-4')}
-          Watch Film
+          Tomosha qilish
         </span>
       </div>
     </div>`;
@@ -1104,7 +1102,7 @@ function renderVideos() {
   });
 }
 
-/* ---------- Messages ------------------------------------------------------ */
+/* ---------- Tilaklar va maktublar ----------------------------------------- */
 
 function renderMessageTabs() {
   $('#message-filters').innerHTML = MESSAGE_TABS.map(
@@ -1152,13 +1150,12 @@ function renderMessages() {
 }
 
 /* ============================================================================
- * 6. MODALS
- * Rendered into #modal-root when opened and removed when closed.
+ * 6. MODALLAR
  * ========================================================================== */
 
 const modalRoot = () => $('#modal-root');
 
-/* ---------- Gallery lightbox (keyboard + swipe) --------------------------- */
+/* ---------- Galereya Lightbox --------------------------------------------- */
 
 let lightboxTouchStartX = null;
 
@@ -1185,19 +1182,16 @@ function buildLightbox() {
     'fixed inset-0 z-50 bg-[#0B0B0B]/95 backdrop-blur-xl flex items-center justify-center p-4 sm:p-8';
   root.setAttribute('role', 'dialog');
   root.setAttribute('aria-modal', 'true');
-  root.setAttribute('aria-label', 'Image Lightbox');
+  root.setAttribute('aria-label', 'Rasmni kattalashtirib ko‘rish');
   root.innerHTML = `
-    <!-- Close Button -->
-    <button type="button" data-lightbox="close" aria-label="Close Lightbox" class="absolute top-5 right-5 z-20 p-3 rounded-full bg-[#141414] border border-[#292929] text-[#F5F5F5] hover:border-[#C5A059] hover:text-[#C5A059] transition-colors">
+    <button type="button" data-lightbox="close" aria-label="Yopish" class="absolute top-5 right-5 z-20 p-3 rounded-full bg-[#141414] border border-[#292929] text-[#F5F5F5] hover:border-[#C5A059] hover:text-[#C5A059] transition-colors">
       ${icon('x', 'w-5 h-5')}
     </button>
 
-    <!-- Previous Image -->
-    <button type="button" data-lightbox="prev" aria-label="Previous photograph" class="absolute left-4 sm:left-8 z-20 p-3 rounded-full bg-[#141414]/90 border border-[#292929] text-[#F5F5F5] hover:border-[#C5A059] hover:text-[#C5A059] transition-colors">
+    <button type="button" data-lightbox="prev" aria-label="Oldingi rasm" class="absolute left-4 sm:left-8 z-20 p-3 rounded-full bg-[#141414]/90 border border-[#292929] text-[#F5F5F5] hover:border-[#C5A059] hover:text-[#C5A059] transition-colors">
       ${icon('chevron-left', 'w-6 h-6')}
     </button>
 
-    <!-- Image & Editorial Caption -->
     <div class="max-w-5xl w-full flex flex-col items-center">
       <img data-lightbox="image" src="" alt="" class="max-h-[72vh] w-auto object-contain border border-[#292929]">
       <div class="mt-5 text-center max-w-xl">
@@ -1207,8 +1201,7 @@ function buildLightbox() {
       </div>
     </div>
 
-    <!-- Next Image -->
-    <button type="button" data-lightbox="next" aria-label="Next photograph" class="absolute right-4 sm:right-8 z-20 p-3 rounded-full bg-[#141414]/90 border border-[#292929] text-[#F5F5F5] hover:border-[#C5A059] hover:text-[#C5A059] transition-colors">
+    <button type="button" data-lightbox="next" aria-label="Keyingi rasm" class="absolute right-4 sm:right-8 z-20 p-3 rounded-full bg-[#141414]/90 border border-[#292929] text-[#F5F5F5] hover:border-[#C5A059] hover:text-[#C5A059] transition-colors">
       ${icon('chevron-right', 'w-6 h-6')}
     </button>`;
 
@@ -1216,7 +1209,6 @@ function buildLightbox() {
   $('[data-lightbox="prev"]', root).addEventListener('click', () => stepLightbox(-1));
   $('[data-lightbox="next"]', root).addEventListener('click', () => stepLightbox(1));
 
-  // Swipe support
   root.addEventListener('touchstart', (e) => {
     lightboxTouchStartX = e.touches[0].clientX;
   });
@@ -1254,7 +1246,7 @@ function renderLightbox() {
   $('[data-lightbox="caption"]', root).textContent = photo.caption;
 }
 
-/* ---------- Student dossier modal ----------------------------------------- */
+/* ---------- Sinfdosh portfoliosi modali ----------------------------------- */
 
 function openStudent(studentId) {
   state.activeStudent = STUDENTS_DATA.find((s) => s.id === studentId) || null;
@@ -1282,7 +1274,7 @@ function renderStudentModal() {
   root.setAttribute('aria-label', student.name);
   root.innerHTML = `
     <div data-modal-panel class="max-w-3xl w-full bg-[#141414] border border-[#292929] overflow-hidden grid grid-cols-1 md:grid-cols-12 relative">
-      <button type="button" data-modal-close aria-label="Close student profile" class="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-[#0B0B0B]/80 border border-[#292929] text-[#F5F5F5] hover:border-[#C5A059]">
+      <button type="button" data-modal-close aria-label="Profilni yopish" class="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-[#0B0B0B]/80 border border-[#292929] text-[#F5F5F5] hover:border-[#C5A059]">
         ${icon('x', 'w-4 h-4')}
       </button>
 
@@ -1292,7 +1284,7 @@ function renderStudentModal() {
 
       <div class="md:col-span-7 p-7 sm:p-10 flex flex-col justify-between">
         <div>
-          <div class="text-[11px] uppercase tracking-[0.25em] text-[#C5A059]">NO. ${escapeHTML(student.number)} · ${escapeHTML(student.role)}</div>
+          <div class="text-[11px] uppercase tracking-[0.25em] text-[#C5A059]">№ ${escapeHTML(student.number)} · ${escapeHTML(student.role)}</div>
           <h3 class="font-serif text-3xl text-[#F5F5F5] mt-1">${escapeHTML(student.name)}</h3>
           <div class="text-xs italic text-[#999999] mt-0.5">“${escapeHTML(student.nickname)}”</div>
 
@@ -1300,11 +1292,11 @@ function renderStudentModal() {
 
           <div class="mt-6 space-y-4 pt-5 border-t border-[#292929]">
             <div>
-              <div class="text-[10px] uppercase tracking-[0.22em] text-[#C5A059]">Favorite School Memory</div>
+              <div class="text-[10px] uppercase tracking-[0.22em] text-[#C5A059]">Eng sevimli maktab xotirasi</div>
               <p class="mt-1 text-sm text-[#999999]">${escapeHTML(student.favoriteMemory)}</p>
             </div>
             <div>
-              <div class="text-[10px] uppercase tracking-[0.22em] text-[#C5A059]">Future Dream</div>
+              <div class="text-[10px] uppercase tracking-[0.22em] text-[#C5A059]">Kelajakdagi orzusi</div>
               <p class="mt-1 text-sm text-[#F5F5F5]">${escapeHTML(student.futureDream)}</p>
             </div>
           </div>
@@ -1319,7 +1311,7 @@ function renderStudentModal() {
   modalRoot().appendChild(root);
 }
 
-/* ---------- Video player modal -------------------------------------------- */
+/* ---------- Video pleyer modali ------------------------------------------- */
 
 function openVideo(videoId) {
   state.activeVideo = VIDEOS_DATA.find((v) => v.id === videoId) || null;
@@ -1333,7 +1325,7 @@ function closeVideo() {
 
 function renderVideoModal() {
   const existing = $('#video-modal');
-  if (existing) existing.remove(); // removing the <video> also stops playback
+  if (existing) existing.remove();
 
   const video = state.activeVideo;
   if (!video) return;
@@ -1352,7 +1344,7 @@ function renderVideoModal() {
           <span class="text-[10px] uppercase tracking-[0.25em] text-[#C5A059]">${escapeHTML(video.chapter)}</span>
           <h3 class="font-serif text-xl sm:text-2xl text-[#F5F5F5]">${escapeHTML(video.title)}</h3>
         </div>
-        <button type="button" data-modal-close aria-label="Close video player" class="p-2 rounded-full border border-[#292929] text-[#F5F5F5] hover:border-[#C5A059]">
+        <button type="button" data-modal-close aria-label="Videoni yopish" class="p-2 rounded-full border border-[#292929] text-[#F5F5F5] hover:border-[#C5A059]">
           ${icon('x', 'w-5 h-5')}
         </button>
       </div>
@@ -1372,17 +1364,17 @@ function renderVideoModal() {
 }
 
 /* ============================================================================
- * 7. COUNTDOWN
+ * 7. JONLI TAYMER (COUNTDOWN)
  * ========================================================================== */
 
 const COUNTDOWN_UNITS = [
-  { key: 'days', label: 'Days' },
-  { key: 'hours', label: 'Hours' },
-  { key: 'minutes', label: 'Minutes' },
-  { key: 'seconds', label: 'Seconds' },
+  { key: 'days', label: 'Kun' },
+  { key: 'hours', label: 'Soat' },
+  { key: 'minutes', label: 'Daqiqa' },
+  { key: 'seconds', label: 'Soniya' },
 ];
 
-let countdownMode = null; // 'running' | 'completed'
+let countdownMode = null;
 
 function setCountdownMode(mode) {
   if (countdownMode === mode) return;
@@ -1393,8 +1385,8 @@ function setCountdownMode(mode) {
   toggleClasses(box, completed, CLASSES.countdownDone, CLASSES.countdownGrid);
 
   box.innerHTML = completed
-    ? `<div class="text-xs uppercase tracking-[0.3em] text-[#C5A059] mb-3">MILESTONE REACHED</div>
-       <h3 class="font-serif text-3xl md:text-5xl text-[#F5F5F5]">The Chapter Has Begun — Congratulations ${escapeHTML(SITE_CONFIG.className)}!</h3>`
+    ? `<div class="text-xs uppercase tracking-[0.3em] text-[#C5A059] mb-3">YANGI BOSQICH MUBORAK</div>
+       <h3 class="font-serif text-3xl md:text-5xl text-[#F5F5F5]">Yangi hayot boshlandi — Tabriklaymiz, ${escapeHTML(SITE_CONFIG.className)}!</h3>`
     : COUNTDOWN_UNITS.map(
         (unit) => `
           <div class="p-6 md:p-10 bg-[#0B0B0B] border border-[#292929] relative overflow-hidden">
@@ -1434,28 +1426,25 @@ function startCountdown() {
 }
 
 /* ============================================================================
- * 8. EVENTS & INITIALISATION
+ * 8. HODISALAR VA ISHGA TUSHIRISH
  * ========================================================================== */
 
 function bindEvents() {
-  // Any element with data-scroll-to smooth-scrolls to that section
   document.addEventListener('click', (e) => {
     const trigger = e.target.closest('[data-scroll-to]');
     if (trigger) scrollToSection(trigger.dataset.scrollTo);
   });
 
-  // Mobile menu & music
   $('#menu-toggle').addEventListener('click', () => setMobileMenu(!state.mobileMenuOpen));
   $('#music-toggle').addEventListener('click', music.toggle);
 
-  // Gallery filters + lightbox triggers
   $('#gallery-filters').addEventListener('click', (e) => {
     const button = e.target.closest('[data-category]');
     if (!button) return;
     state.selectedCategory = button.dataset.category;
     updateGalleryFilters();
     renderGallery();
-    renderLightbox(); // keeps an open lightbox consistent with the filtered list
+    renderLightbox();
   });
 
   const galleryGrid = $('#gallery-grid');
@@ -1468,7 +1457,6 @@ function bindEvents() {
     if (card) onActivateKey(e, () => openLightbox(Number(card.dataset.galleryIndex)));
   });
 
-  // Student search + dossier triggers
   $('#student-search').addEventListener('input', (e) => {
     state.studentSearch = e.target.value;
     renderStudents();
@@ -1484,7 +1472,6 @@ function bindEvents() {
     if (card) onActivateKey(e, () => openStudent(card.dataset.studentId));
   });
 
-  // Timeline pills & node hover
   $('#timeline-pills').addEventListener('click', (e) => {
     const button = e.target.closest('[data-grade-index]');
     if (!button) return;
@@ -1502,7 +1489,6 @@ function bindEvents() {
     });
   });
 
-  // Video cards
   const videoGrid = $('#video-grid');
   videoGrid.addEventListener('click', (e) => {
     const card = e.target.closest('[data-video-id]');
@@ -1513,7 +1499,6 @@ function bindEvents() {
     if (card) onActivateKey(e, () => openVideo(card.dataset.videoId));
   });
 
-  // Message tabs
   $('#message-filters').addEventListener('click', (e) => {
     const button = e.target.closest('[data-message-tab]');
     if (!button) return;
@@ -1522,7 +1507,6 @@ function bindEvents() {
     renderMessages();
   });
 
-  // Keyboard navigation for lightbox & modals
   window.addEventListener('keydown', (e) => {
     if (state.lightboxIndex !== null) {
       if (e.key === 'Escape') closeLightbox();
@@ -1543,6 +1527,7 @@ function bindEvents() {
 
 function init() {
   applySiteConfig();
+  startHeroSlideshow();
   renderNavigation();
   renderMusicButton();
   renderGalleryFilters();
@@ -1555,7 +1540,7 @@ function init() {
   renderMessages();
 
   bindEvents();
-  initReveals(); // static sections (headers, story, countdown, wishes, final)
+  initReveals();
   startCountdown();
   handleScroll();
 }
