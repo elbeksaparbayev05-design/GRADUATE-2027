@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GRADUATE 2027</title>
+  <meta name="description" content="One journey. A thousand memories. An endless future.">
+
+  <!-- Google Fonts: Cormorant Garamond & Inter -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ======================================================================
+       ICON SPRITE (Lucide icons used by the site, referenced via <use>)
+  ======================================================================= -->
+  <svg class="hidden" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="icon-play" viewBox="0 0 24 24"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"/></symbol>
+    <symbol id="icon-volume-x" viewBox="0 0 24 24"><path d="M11 4.702a.7.7 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.7.7 0 0 0 11 19.298z"/><path d="m16.5 14.5 5-5"/><path d="m16.5 9.5 5 5"/></symbol>
+    <symbol id="icon-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+    <symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></symbol>
+    <symbol id="icon-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></symbol>
+    <symbol id="icon-sparkles" viewBox="0 0 24 24"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></symbol>
+    <symbol id="icon-chevron-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+    <symbol id="icon-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="icon-quote" viewBox="0 0 24 24"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/></symbol>
+    <symbol id="icon-film" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></symbol>
+  </svg>
+
+  <div class="site-root min-h-screen bg-[#0B0B0B] text-[#F5F5F5] selection:bg-[#C5A059] selection:text-[#0B0B0B] overflow-x-hidden">
+
+    <!-- ====================================================================
+         STICKY GLASS NAVBAR
+    ===================================================================== -->
+    <header id="site-header" class="fixed top-0 inset-x-0 z-40 transition-all duration-500 bg-gradient-to-b from-[#0B0B0B]/80 to-transparent py-6">
+      <div class="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between">
+        <!-- Left: Brand Logo -->
+        <button type="button" data-scroll-to="home" class="flex items-center gap-3 text-left group focus:outline-none" aria-label="Go to top">
+          <span class="w-8 h-8 rounded-full border border-[#C5A059]/60 flex items-center justify-center font-serif text-sm text-[#C5A059] group-hover:bg-[#C5A059] group-hover:text-[#0B0B0B] transition-colors">27</span>
+          <span class="font-serif text-lg sm:text-xl tracking-[0.18em] text-[#F5F5F5] uppercase">GRADUATE <span class="text-[#C5A059]">2027</span></span>
+        </button>
+
+        <!-- Center: Desktop Links (generated from NAV_ITEMS in script.js) -->
+        <nav id="desktop-nav" class="hidden lg:flex items-center gap-8" aria-label="Primary Navigation"></nav>
+
+        <!-- Right: Music Toggle & Mobile Menu Button -->
+        <div class="flex items-center gap-3">
+          <button type="button" id="music-toggle" aria-pressed="false" aria-label="Play ambient soundtrack" class="flex items-center gap-2.5 px-3.5 py-2 rounded-full border text-xs tracking-[0.15em] uppercase transition-all border-[#292929] bg-[#141414]/80 text-[#999999] hover:border-[#C5A059]/50 hover:text-[#F5F5F5]">
+            <svg class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#icon-volume-x"></use></svg>
+            <span class="hidden sm:inline">Sound Off</span>
+          </button>
+
+          <button type="button" id="menu-toggle" class="lg:hidden p-2.5 rounded-full border border-[#292929] bg-[#141414] text-[#F5F5F5] hover:border-[#C5A059]/60 transition-colors" aria-label="Toggle Menu" aria-expanded="false">
+            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use id="menu-toggle-icon" href="#icon-menu"></use></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Drawer (toggled by the menu button) -->
+      <div id="mobile-drawer" class="hidden lg:hidden bg-[#0B0B0B]/98 backdrop-blur-2xl border-b border-[#292929] px-6 pt-4 pb-8">
+        <div id="mobile-nav" class="flex flex-col space-y-3"></div>
+      </div>
+    </header>
+
+    <!-- ====================================================================
+         SECTION 01 — CINEMATIC HERO
+    ===================================================================== -->
+    <section id="home" class="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
+      <!-- Full-screen Cinematic Photographic Background -->
+      <div class="absolute inset-0">
+        <img id="hero-image" src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=2000&q=85" alt="Class of 2027 Cinematic Graduation Atmosphere" class="w-full h-full object-cover object-center scale-105 transition-transform duration-[12000ms] ease-out">
+        <!-- Multi-layered editorial dark vignette -->
+        <div class="absolute inset-0 bg-gradient-to-b from-[#0B0B0B]/80 via-[#0B0B0B]/60 to-[#0B0B0B]"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_15%,#0B0B0B_95%)]"></div>
+      </div>
+
+      <!-- Hero Centerpiece -->
+      <div class="relative z-10 max-w-5xl mx-auto px-6 text-center pt-20">
+        <div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-full border border-[#C5A059]/40 bg-[#0B0B0B]/60 backdrop-blur-md mb-8">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#C5A059]"></span>
+          <span id="hero-badge-text" class="text-[11px] uppercase tracking-[0.3em] text-[#C5A059] font-medium">GRADUATE 2027 · [Your School / Lyceum Name]</span>
+        </div>
+
+        <h1 id="hero-title" class="hero-title font-serif text-[#F5F5F5] font-normal tracking-[-0.025em] leading-[1.02]">The End of an Era.</h1>
+
+        <p id="hero-subtitle" class="hero-subtitle mt-6 max-w-2xl mx-auto text-[#F5F5F5]/80 font-light tracking-wide leading-relaxed">One journey. A thousand memories. An endless future.</p>
+
+        <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <button type="button" data-scroll-to="memories" class="px-8 py-4 bg-[#C5A059] text-[#0B0B0B] text-xs font-semibold uppercase tracking-[0.24em] hover:bg-[#d6b36d] transition-all duration-300 shadow-[0_0_40px_rgba(197,160,89,0.25)]">EXPLORE OUR MEMORIES</button>
+          <button type="button" data-scroll-to="story" class="px-8 py-4 border border-[#292929] bg-[#141414]/70 backdrop-blur-md text-[#F5F5F5] text-xs uppercase tracking-[0.24em] hover:border-[#C5A059] hover:text-[#C5A059] transition-all duration-300">READ OUR STORY</button>
+        </div>
+      </div>
+
+      <!-- Scroll Indicator -->
+      <button type="button" data-scroll-to="story" aria-label="Scroll down to Our Story" class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-[#999999] hover:text-[#C5A059] transition-colors">
+        <span class="text-[10px] uppercase tracking-[0.3em]">Scroll</span>
+        <svg class="w-4 h-4 animate-bounce text-[#C5A059]" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#icon-arrow-down"></use></svg>
+      </button>
+    </section>
+
+    <!-- ====================================================================
+         SECTION 02 — OUR STORY
+    ===================================================================== -->
+    <section id="story" class="py-24 md:py-36 px-6 sm:px-8 border-t border-[#292929]/60">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          <!-- Left Editorial Narrative -->
+          <div class="lg:col-span-6">
+            <div data-reveal class="transition-all duration-1000 ease-out opacity-0 translate-y-7 mb-14 md:mb-20 max-w-3xl">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="text-xs font-medium tracking-[0.28em] text-[#C5A059] uppercase">01</span>
+                <span class="h-[1px] w-8 bg-[#C5A059]/60"></span>
+                <span class="text-xs tracking-[0.24em] text-[#999999] uppercase">THE CHRONICLE</span>
+              </div>
+              <h2 class="section-title font-serif text-[#F5F5F5] font-normal tracking-[-0.02em] leading-[1.08]">Every Ending Has a Story.</h2>
+            </div>
+
+            <div data-reveal data-delay="120" class="transition-all duration-1000 ease-out opacity-0 translate-y-7">
+              <div class="space-y-6 text-[#999999] text-base md:text-lg leading-[1.85] font-light">
+                <p class="text-[#F5F5F5] text-xl md:text-2xl font-serif italic leading-relaxed">“Eleven years ago, we arrived with backpacks too large for our shoulders and curiosity larger than the hallways.”</p>
+                <p>Between the first hesitant September bell in 2016 and the quiet nostalgia of May 2027, we grew up inside these walls. We shared dog-eared notebooks, last-minute exam prayers, rainy walks home, and victories that echoed across the entire schoolyard.</p>
+                <p>This digital time capsule preserves the laughter that never made it onto report cards—a tribute to the friendships, mentors, and fleeting afternoons that shaped who we are becoming.</p>
+              </div>
+
+              <!-- Editorial Key Stats -->
+              <div class="mt-12 pt-8 border-t border-[#292929] grid grid-cols-3 gap-6">
+                <div>
+                  <div class="font-serif text-3xl md:text-4xl text-[#C5A059]">11</div>
+                  <div class="mt-1 text-[11px] uppercase tracking-[0.2em] text-[#999999]">Years Together</div>
+                </div>
+                <div>
+                  <div class="font-serif text-3xl md:text-4xl text-[#F5F5F5]">2,100+</div>
+                  <div class="mt-1 text-[11px] uppercase tracking-[0.2em] text-[#999999]">School Mornings</div>
+                </div>
+                <div>
+                  <div class="font-serif text-3xl md:text-4xl text-[#C5A059]">∞</div>
+                  <div class="mt-1 text-[11px] uppercase tracking-[0.2em] text-[#999999]">Shared Memories</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Asymmetrical Editorial Photography -->
+          <div class="lg:col-span-6">
+            <div data-reveal data-delay="200" class="transition-all duration-1000 ease-out opacity-0 translate-y-7 relative">
+              <div class="relative z-10 overflow-hidden border border-[#292929] bg-[#141414]">
+                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80" alt="Classmates laughing together on campus" loading="lazy" class="w-full aspect-[4/5] object-cover hover:scale-105 transition-transform duration-700">
+              </div>
+
+              <!-- Overlapping Accent Frame -->
+              <div class="hidden sm:block absolute -bottom-8 -left-8 z-20 w-56 md:w-64 p-3 bg-[#141414] border border-[#C5A059]/50 shadow-2xl">
+                <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=600&q=80" alt="Candid classroom moment" loading="lazy" class="w-full aspect-[4/3] object-cover">
+                <div class="pt-2.5 pb-1 px-1 flex items-center justify-between text-[10px] tracking-[0.2em] uppercase text-[#C5A059]">
+                  <span>ARCHIVE · 2016–2027</span>
+                  <span>11-A</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SECTION 03 — MEMORIES GALLERY (MASONRY + LIGHTBOX)
+    ===================================================================== -->
+    <section id="memories" class="py-24 md:py-36 px-6 sm:px-8 bg-[#141414]/40 border-t border-[#292929]/60">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-8">
+          <div data-reveal class="transition-all duration-1000 ease-out opacity-0 translate-y-7 mb-14 md:mb-20 max-w-3xl">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="text-xs font-medium tracking-[0.28em] text-[#C5A059] uppercase">02</span>
+              <span class="h-[1px] w-8 bg-[#C5A059]/60"></span>
+              <span class="text-xs tracking-[0.24em] text-[#999999] uppercase">VISUAL ARCHIVE</span>
+            </div>
+            <h2 class="section-title font-serif text-[#F5F5F5] font-normal tracking-[-0.02em] leading-[1.08]">Moments We Keep Forever.</h2>
+            <p class="mt-5 text-[#999999] text-base md:text-lg leading-relaxed font-light">Click any frame to open the full-resolution editorial lightbox.</p>
+          </div>
+
+          <!-- Category Filter Pills (generated in script.js) -->
+          <div id="gallery-filters" class="flex flex-wrap gap-2 pb-2" role="tablist" aria-label="Filter gallery by category"></div>
+        </div>
+
+        <!-- Responsive Masonry Columns (generated in script.js) -->
+        <div id="gallery-grid" class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6"></div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SECTION 04 — CLASS OF 2027 (DIRECTORY & STUDENT DETAIL MODAL)
+    ===================================================================== -->
+    <section id="class" class="py-24 md:py-36 px-6 sm:px-8 border-t border-[#292929]/60">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-14">
+          <div data-reveal class="transition-all duration-1000 ease-out opacity-0 translate-y-7 mb-14 md:mb-20 max-w-3xl">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="text-xs font-medium tracking-[0.28em] text-[#C5A059] uppercase">03</span>
+              <span class="h-[1px] w-8 bg-[#C5A059]/60"></span>
+              <span class="text-xs tracking-[0.24em] text-[#999999] uppercase">THE GENERATION</span>
+            </div>
+            <h2 class="section-title font-serif text-[#F5F5F5] font-normal tracking-[-0.02em] leading-[1.08]">The People Behind the Memories.</h2>
+            <p class="mt-5 text-[#999999] text-base md:text-lg leading-relaxed font-light">Select any classmate card to read their favorite school memory and future ambition.</p>
+          </div>
+
+          <!-- Search Input -->
+          <div class="relative w-full lg:w-80">
+            <svg class="w-4 h-4 text-[#999999] absolute left-4 top-1/2 -translate-y-1/2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#icon-search"></use></svg>
+            <input id="student-search" type="text" placeholder="Search classmate, role, dream..." aria-label="Search classmates" class="w-full pl-11 pr-4 py-3 bg-[#141414] border border-[#292929] text-sm text-[#F5F5F5] placeholder-[#999999] focus:outline-none focus:border-[#C5A059] transition-colors">
+          </div>
+        </div>
+
+        <!-- Editorial Student Cards Grid (generated in script.js) -->
+        <div id="student-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SECTION 05 — OUR JOURNEY (GRADE 1 TO GRADE 11 INTERACTIVE TIMELINE)
+    ===================================================================== -->
+    <section id="journey" class="py-24 md:py-36 px-6 sm:px-8 bg-[#141414]/40 border-t border-[#292929]/60">
+      <div class="max-w-6xl mx-auto">
+        <div data-reveal class="transition-all duration-1000 ease-out opacity-0 translate-y-7 mb-14 md:mb-20 text-center max-w-3xl mx-auto">
+          <div class="flex items-center gap-3 mb-4 justify-center">
+            <span class="text-xs font-medium tracking-[0.28em] text-[#C5A059] uppercase">04</span>
+            <span class="h-[1px] w-8 bg-[#C5A059]/60"></span>
+            <span class="text-xs tracking-[0.24em] text-[#999999] uppercase">ELEVEN CHAPTERS</span>
+          </div>
+          <h2 class="section-title font-serif text-[#F5F5F5] font-normal tracking-[-0.02em] leading-[1.08]">From First Bell to Final Goodbye.</h2>
+          <p class="mt-5 text-[#999999] text-base md:text-lg leading-relaxed font-light">Trace our eleven-year metamorphosis from Grade 1 to Grade 11.</p>
+        </div>
+
+        <!-- Quick-Jump Grade Selector Pills (generated in script.js) -->
+        <div id="timeline-pills" class="flex flex-wrap justify-center gap-2 mb-16"></div>
+
+        <!-- Alternating Vertical Documentary Timeline -->
+        <div class="relative">
+          <!-- Central Gold Spine -->
+          <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-[#C5A059]/50 to-transparent -translate-x-1/2"></div>
+
+          <div id="timeline-list" class="space-y-16 md:space-y-24"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SECTION 06 — VIDEO MEMORIES (CINEMATIC REELS & MODAL PLAYER)
+    ===================================================================== -->
+    <section id="videos" class="py-24 md:py-36 px-6 sm:px-8 border-t border-[#292929]/60">
+      <div class="max-w-7xl mx-auto">
+        <div data-reveal class="transition-all duration-1000 ease-out opacity-0 translate-y-7 mb-14 md:mb-20 max-w-3xl">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="text-xs font-medium tracking-[0.28em] text-[#C5A059] uppercase">05</span>
+            <span class="h-[1px] w-8 bg-[#C5A059]/60"></span>
+            <span class="text-xs tracking-[0.24em] text-[#999999] uppercase">MOTION ARCHIVE</span>
+          </div>
+          <h2 class="section-title font-serif text-[#F5F5F5] font-normal tracking-[-0.02em] leading-[1.08]">Some Moments Deserve to Move.</h2>
+          <p class="mt-5 text-[#999999] text-base md:text-lg leading-relaxed font-light">Original senior short films, documentary interviews, and backstage reels.</p>
+        </div>
+
+        <!-- Video cards (generated in script.js) -->
+        <div id="video-grid" class="grid grid-cols-1 lg:grid-cols-12 gap-8"></div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SECTION 07 — LIVE GRADUATION COUNTDOWN
+    ===================================================================== -->
+    <section class="py-24 md:py-32 px-6 sm:px-8 bg-[#141414] border-y border-[#292929]">
+      <div class="max-w-5xl mx-auto text-center">
+        <div data-reveal class="transition-all duration-1000 ease-out opacity-0 translate-y-7 mb-14 md:mb-20 text-center max-w-3xl mx-auto">
+          <div class="flex items-center gap-3 mb-4 justify-center">
+            <span class="text-xs font-medium tracking-[0.28em] text-[#C5A059] uppercase">06</span>
+            <span class="h-[1px] w-8 bg-[#C5A059]/60"></span>
+            <span class="text-xs tracking-[0.24em] text-[#999999] uppercase">CEREMONY COUNTDOWN</span>
+          </div>
+          <h2 class="section-title font-serif text-[#F5F5F5] font-normal tracking-[-0.02em] leading-[1.08]">The Final Chapter Is Near.</h2>
+          <p id="countdown-subtitle" class="mt-5 text-[#999999] text-base md:text-lg leading-relaxed font-light">Counting every second until Class of 2027 steps onto the graduation stage.</p>
+        </div>
+
+        <!-- Countdown tiles / completed message (rendered in script.js) -->
+        <div id="countdown" data-reveal class="transition-all duration-1000 ease-out opacity-0 translate-y-7"></div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SECTION 08 — WORDS THAT MATTER (TRIBUTES & WISHES)
+    ===================================================================== -->
+    <section id="wishes" class="py-24 md:py-36 px-6 sm:px-8">
+      <div class="max-w-7xl mx-auto">
+        <div data-reveal class="transition-all duration-1000 ease-out opacity-0 translate-y-7 mb-14 md:mb-20 max-w-3xl">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="text-xs font-medium tracking-[0.28em] text-[#C5A059] uppercase">07</span>
+            <span class="h-[1px] w-8 bg-[#C5A059]/60"></span>
+            <span class="text-xs tracking-[0.24em] text-[#999999] uppercase">LETTERS &amp; DEDICATIONS</span>
+          </div>
+          <h2 class="section-title font-serif text-[#F5F5F5] font-normal tracking-[-0.02em] leading-[1.08]">Words We Will Never Forget.</h2>
+          <p class="mt-5 text-[#999999] text-base md:text-lg leading-relaxed font-light">Reflections from the educators who guided us and the classmates who walked beside us.</p>
+        </div>
+
+        <!-- Featured Homeroom Teacher Editorial Tribute -->
+        <div data-reveal class="transition-all duration-1000 ease-out opacity-0 translate-y-7 mb-16 p-8 md:p-14 bg-[#141414] border border-[#C5A059]/50 relative">
+          <svg class="w-10 h-10 text-[#C5A059]/40 mb-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#icon-quote"></use></svg>
+          <div id="teacher-label" class="text-xs uppercase tracking-[0.28em] text-[#C5A059] mb-4">FROM OUR HOMEROOM MENTOR</div>
+          <blockquote id="teacher-quote" class="font-serif italic text-2xl sm:text-3xl md:text-4xl text-[#F5F5F5] leading-[1.4]">“When you walked into my classroom eleven years ago, you asked how to spell the biggest words. Today, you are writing stories none of us could have imagined. Carry your kindness louder than your ambitions, remember where you began, and know that my door—and my heart—will always remain open to Class of 2027.”</blockquote>
+          <div class="mt-8 pt-6 border-t border-[#292929] flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <div id="teacher-author" class="font-serif text-xl text-[#F5F5F5]">[Class Teacher Full Name]</div>
+              <div id="teacher-role" class="text-xs uppercase tracking-[0.2em] text-[#999999] mt-0.5">Class Teacher · 2016–2027</div>
+            </div>
+            <span id="teacher-dedication" class="px-3.5 py-1.5 border border-[#292929] text-[11px] uppercase tracking-[0.2em] text-[#C5A059]">Dedicated to Class of 2027</span>
+          </div>
+        </div>
+
+        <!-- Filter Tabs for Letters (generated in script.js) -->
+        <div id="message-filters" class="flex items-center gap-2 mb-8"></div>
+
+        <!-- Editorial Letters Grid (generated in script.js) -->
+        <div id="message-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SECTION 09 — FINAL CHAPTER & PREMIUM FOOTER
+    ===================================================================== -->
+    <section class="relative py-32 md:py-44 px-6 sm:px-8 border-t border-[#292929] overflow-hidden">
+      <div class="absolute inset-0">
+        <img id="final-image" src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=2000&q=85" alt="Graduation Farewell Horizon" loading="lazy" class="w-full h-full object-cover opacity-30">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0B0B0B] via-[#0B0B0B]/75 to-[#0B0B0B]"></div>
+      </div>
+
+      <div data-reveal class="transition-all duration-1000 ease-out opacity-0 translate-y-7 relative z-10 max-w-4xl mx-auto text-center">
+        <div class="w-14 h-14 mx-auto mb-8 rounded-full border border-[#C5A059] flex items-center justify-center font-serif text-xl text-[#C5A059]">2027</div>
+
+        <h2 class="final-title font-serif text-[#F5F5F5] font-normal leading-[1.08]">
+          The End of an Era. <br>
+          <span class="italic text-[#C5A059]">The Beginning of Everything.</span>
+        </h2>
+
+        <p id="final-quote" class="mt-6 font-serif italic text-xl md:text-2xl text-[#F5F5F5]/85">“We came as strangers. We leave as memories.”</p>
+
+        <div class="mt-10">
+          <button type="button" data-scroll-to="home" class="px-8 py-3.5 border border-[#C5A059]/70 text-xs uppercase tracking-[0.25em] text-[#C5A059] hover:bg-[#C5A059] hover:text-[#0B0B0B] transition-all">Return to Top</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#0B0B0B] border-t border-[#292929] py-12 px-6 sm:px-8">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-[#999999]">
+        <div class="flex items-center gap-3">
+          <span class="font-serif text-base tracking-[0.2em] text-[#F5F5F5]">GRADUATE <span class="text-[#C5A059]">2027</span></span>
+          <span>·</span>
+          <span id="footer-school">[Your School / Lyceum Name]</span>
+        </div>
+
+        <div id="footer-nav" class="flex flex-wrap justify-center gap-6 uppercase tracking-[0.18em]"></div>
+
+        <div id="footer-tagline" class="tracking-wider">Digital Time Capsule · Class of 2027</div>
+      </div>
+    </footer>
+
+    <!-- ====================================================================
+         MODALS (Lightbox, Student Dossier, Video Player) are rendered here
+         by script.js when opened and removed when closed.
+    ===================================================================== -->
+    <div id="modal-root"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
