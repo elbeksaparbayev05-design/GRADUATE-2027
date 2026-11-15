@@ -44,7 +44,7 @@ const SITE_CONFIG = {
   cityLocation: "[Shahar, O'zbekiston]",
   classTeacher: '[Sinf rahbarining F.I.Sh.]',
   // Ixtiyoriy: MP3 fayl yo'lini kiriting. Bo'sh qoldirilsa yoki fayl topilmasa, o'rnatilgan mayin pianino musiqasi chalinadi!
-  audioUrl: './assets/audio/Up Theme (Sad Verse Extended).mp3',
+  audioUrl: './assets/audio/Je veux - ZAZ.m4a',
   finalQuote: "Begona bo'lib keldik. Xotira bo'lib ketmoqdamiz.",
 };
 
